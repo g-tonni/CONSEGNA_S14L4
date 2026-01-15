@@ -3,9 +3,8 @@ package giada_tonni;
 import giada_tonni.entities.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Application {
 
@@ -75,6 +74,51 @@ public class Application {
 
         List<Order> elencoOrdini = new ArrayList<>(Arrays.asList(o1, o2, o3, o4, o5, o6, o7, o8, o9, o10));
 
-        
+        System.out.println("--------------------------------------- ESERCIZIO 1");
+        Map<String, List<Order>> ordiniEffettuati = elencoOrdini.stream()
+                .collect(Collectors.groupingBy(order -> order.getCustomer().getName()));
+        ordiniEffettuati.forEach((customer, orders) -> System.out.println("Cliente: " + customer + ". Ordini: " + orders));
+
+        System.out.println("--------------------------------------- ESERCIZIO 2");
+        Map<String, Double> totaleSpesaCliente = elencoOrdini.stream()
+                .collect(
+                        Collectors.groupingBy(
+                                order -> order.getCustomer().getName(),
+                                Collectors.summingDouble(
+                                        order -> order.getProducts().stream().mapToDouble(product -> product.getPrice()).sum()
+                                )
+                        )
+                );
+        totaleSpesaCliente.forEach((customer, tot) -> System.out.println("Cliente: " + customer + ". Totale: " + tot));
+
+        System.out.println("--------------------------------------- ESERCIZIO 3");
+        List<Product> prodottiPiuCostosi = elencoProdotti.stream()
+                .sorted(Comparator.comparing(Product::getPrice).reversed())
+                .limit(5)
+                .toList();
+        prodottiPiuCostosi.forEach(product -> System.out.println(product));
+
+        System.out.println("--------------------------------------- ESERCIZIO 4");
+        List<Double> mediaOrdini = elencoOrdini.stream()
+                .map(order -> {
+                    OptionalDouble media = order.getProducts().stream()
+                            .mapToDouble(Product::getPrice).average();
+                    return media.getAsDouble();
+                }).toList();
+        System.out.println(mediaOrdini);
+
+        System.out.println("--------------------------------------- ESERCIZIO 4.1 (GIUSTO)");
+        OptionalDouble mediaTotOrdini = elencoOrdini.stream()
+                .mapToDouble(order -> {
+                    double somma = order.getProducts().stream()
+                            .mapToDouble(Product::getPrice).sum();
+                    return somma;
+                }).average();
+        System.out.println(mediaTotOrdini.getAsDouble());
+
+        System.out.println("--------------------------------------- ESERCIZIO 5");
+        Map<Category, Double> categoriaTotali = elencoProdotti.stream()
+                .collect(Collectors.groupingBy(order -> order.getCategory(), Collectors.summingDouble(Product::getPrice)));
+        categoriaTotali.forEach((categoria, somme) -> System.out.println("Categoria: " + categoria + ". Totale: " + somme));
     }
 }
