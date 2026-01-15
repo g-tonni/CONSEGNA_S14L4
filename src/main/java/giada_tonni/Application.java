@@ -75,47 +75,6 @@ public class Application {
 
         List<Order> elencoOrdini = new ArrayList<>(Arrays.asList(o1, o2, o3, o4, o5, o6, o7, o8, o9, o10));
 
-        System.out.println("---------------------------------- PRIMO ESERCIZIO");
-        List<Product> booksMag100 = elencoProdotti.stream()
-                .filter(product -> product.getCategory() == Category.BOOK && product.getPrice() > 100)
-                .toList();
-        System.out.println(booksMag100);
-
-
-        System.out.println("---------------------------------- SECONDO ESERCIZIO");
-        List<Order> ordiniBaby = elencoOrdini.stream()
-                .filter(order ->
-                        order.getProducts().stream().anyMatch(product -> product.getCategory() == Category.BABY)
-                )
-                .toList();
-        for (int i = 0; i < ordiniBaby.size(); i++) {
-            System.out.println(ordiniBaby.get(i));
-        }
-
-        System.out.println("---------------------------------- TERZO ESERCIZIO");
-        List<Product> prezzoScontato = elencoProdotti.stream()
-                .filter(product -> product.getCategory() == Category.BOYS)
-                .map(product -> {
-                    product.setPrice10(product.getPrice());
-                    return product;
-                })
-                .toList();
-
-        System.out.println(prezzoScontato);
-
-        System.out.println("---------------------------------- QUARTO ESERCIZIO");
-        LocalDate primaData = LocalDate.of(2026, 1, 1);
-        LocalDate secondaData = LocalDate.of(2026, 6, 30);
-
-        List<Product> prodottiSpeciali =
-                elencoOrdini.stream()
-                        .filter(order -> order.getCustomer().getTier() == 2 && primaData.isBefore(order.getOrderDate()) && secondaData.isAfter(order.getOrderDate()))
-                        .map(order -> order.getProducts())
-                        .flatMap(products -> products.stream())
-                        .toList();
-        for (int i = 0; i < prodottiSpeciali.size(); i++) {
-            System.out.println(prodottiSpeciali.get(i));
-        }
-
+        
     }
 }
