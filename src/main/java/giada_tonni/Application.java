@@ -75,15 +75,15 @@ public class Application {
         List<Order> elencoOrdini = new ArrayList<>(Arrays.asList(o1, o2, o3, o4, o5, o6, o7, o8, o9, o10));
 
         System.out.println("--------------------------------------- ESERCIZIO 1");
-        Map<String, List<Order>> ordiniEffettuati = elencoOrdini.stream()
-                .collect(Collectors.groupingBy(order -> order.getCustomer().getName()));
+        Map<Customer, List<Order>> ordiniEffettuati = elencoOrdini.stream()
+                .collect(Collectors.groupingBy(order -> order.getCustomer()));
         ordiniEffettuati.forEach((customer, orders) -> System.out.println("Cliente: " + customer + ". Ordini: " + orders));
 
         System.out.println("--------------------------------------- ESERCIZIO 2");
-        Map<String, Double> totaleSpesaCliente = elencoOrdini.stream()
+        Map<Customer, Double> totaleSpesaCliente = elencoOrdini.stream()
                 .collect(
                         Collectors.groupingBy(
-                                order -> order.getCustomer().getName(),
+                                order -> order.getCustomer(),
                                 Collectors.summingDouble(
                                         order -> order.getProducts().stream().mapToDouble(product -> product.getPrice()).sum()
                                 )
